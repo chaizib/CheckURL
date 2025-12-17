@@ -1,4 +1,4 @@
-name: Daily Signin
+name: checkurl
 
 on:
   schedule:
@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
     inputs:
       manual:
-        description: '手动执行签到'
+        description: '手动执行'
         required: false
         default: 'true'
 
@@ -31,12 +31,12 @@ jobs:
         echo "当前北京时间: $(TZ=Asia/Shanghai date)"
         echo "任务开始执行..."
       
-    - name: 执行签到
+    - name: 执行访问
       run: |
-        echo "正在访问签到页面 https://tb.chaizi.cc/do.php ..."
-        # 使用curl访问签到页面，并获取HTTP状态码
+        echo "正在访问页面 https://tb.chaizi.cc/do.php ..."
+        # 使用curl访问页面，并获取HTTP状态码
         RESPONSE=$(curl -s -o /dev/null -w "HTTP状态码: %{http_code}, 总耗时: %{time_total}秒" "https://tb.chaizi.cc/do.php")
-        echo "签到结果: $RESPONSE"
+        echo "访问结果: $RESPONSE"
         
         # 如果需要查看响应内容，可以使用这个命令（但会输出到控制台）
         # curl -s "https://tb.chaizi.cc/do.php" | head -c 500
@@ -48,10 +48,10 @@ jobs:
         
     - name: 查看日志内容
       run: |
-        echo "最近5次签到记录:"
+        echo "最近5次访问记录:"
         tail -n 15 signin_log.txt || echo "暂无日志"
         
-    - name: 上传签到日志
+    - name: 上传访问日志
       uses: actions/upload-artifact@v4
       if: always()
       with:
